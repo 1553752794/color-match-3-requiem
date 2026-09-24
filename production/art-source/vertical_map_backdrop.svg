@@ -1,0 +1,116 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1200" viewBox="0 0 1600 1200" preserveAspectRatio="xMidYMid meet">
+  <!-- Archive paper field -->
+  <rect width="1600" height="1200" fill="#07090b"/>
+  <rect x="18" y="18" width="1564" height="1164" fill="#0a0c0f" stroke="#39362f" stroke-width="2" opacity="0.92"/>
+  <rect x="34" y="34" width="1532" height="1132" fill="#0b0d10" stroke="#6f6656" stroke-width="1" opacity="0.42"/>
+  <g fill="none" stroke="#b9b1a0" stroke-width="1" opacity="0.018">
+    <path d="M42 96H1558M42 188H1558M42 282H1558M42 378H1558M42 476H1558M42 576H1558M42 678H1558M42 782H1558M42 888H1558M42 996H1558M42 1106H1558"/>
+  </g>
+  <g fill="none" stroke="#8b8376" stroke-width="1" opacity="0.017">
+    <path d="M54 145C280 127 418 166 642 143C858 121 1088 166 1546 139"/>
+    <path d="M54 333C252 310 444 350 654 326C866 302 1094 348 1546 321"/>
+    <path d="M54 735C294 710 462 754 664 728C894 699 1122 748 1546 722"/>
+    <path d="M54 942C274 917 470 960 688 936C916 911 1162 952 1546 928"/>
+  </g>
+  <g fill="none" stroke="#d2c7ae" stroke-width="1" opacity="0.011">
+    <path d="M128 42L110 1158M382 42L371 1158M1218 42L1232 1158M1474 42L1490 1158"/>
+  </g>
+
+  <!-- Restrained archive folio seams, kept outside the route field -->
+  <g fill="none" stroke-linecap="square">
+    <path d="M212 60V1140M1388 60V1140" stroke="#8f8675" stroke-width="1" opacity="0.08"/>
+    <path d="M238 60V1140M1362 60V1140" stroke="#2d3236" stroke-width="3" opacity="0.22"/>
+    <path d="M62 242H276M1324 242H1538" stroke="#777064" stroke-width="1" opacity="0.08"/>
+    <path d="M62 704H276M1324 704H1538" stroke="#777064" stroke-width="1" opacity="0.07"/>
+    <path d="M62 1004H330M1270 1004H1538" stroke="#777064" stroke-width="1" opacity="0.06"/>
+  </g>
+
+  <!-- Top: muted golden court seal -->
+  <g transform="translate(800 128)" fill="none" stroke="#b7964e" stroke-linecap="square" stroke-linejoin="miter">
+    <circle r="82" stroke-width="2" opacity="0.20"/>
+    <circle r="68" stroke-width="1" opacity="0.12"/>
+    <path d="M-58 18L-42-34L-12-12L0-58L12-12L42-34L58 18Z" stroke-width="3" opacity="0.28"/>
+    <path d="M-50 25H50M-38 37H38" stroke-width="2" opacity="0.22"/>
+    <path d="M0-82V-102M0 82V102M-82 0H-102M82 0H102" stroke-width="2" opacity="0.16"/>
+    <path d="M-67-47L-82-58M67-47L82-58M-67 47L-82 58M67 47L82 58" stroke-width="1" opacity="0.14"/>
+  </g>
+  <g fill="#a98a45" opacity="0.06">
+    <path d="M414 78H650L622 88H430Z"/>
+    <path d="M950 78H1186L1170 88H978Z"/>
+    <path d="M326 112H594L565 120H348Z"/>
+    <path d="M1006 112H1274L1252 120H1035Z"/>
+  </g>
+  <g fill="none" stroke="#a78949" stroke-width="2" opacity="0.10">
+    <path d="M270 172C375 151 475 157 580 178"/>
+    <path d="M1020 178C1125 157 1225 151 1330 172"/>
+    <path d="M326 200C410 187 490 192 562 208"/>
+    <path d="M1038 208C1110 192 1190 187 1274 200"/>
+  </g>
+
+  <!-- Side rubbings frame the clean central route column -->
+  <g fill="none" stroke="#77746d" stroke-linecap="square">
+    <path d="M84 326C132 306 174 313 208 338C230 354 252 358 286 350" stroke-width="4" opacity="0.035"/>
+    <path d="M86 374C145 358 197 368 264 392" stroke-width="2" opacity="0.045"/>
+    <path d="M1514 326C1468 306 1426 313 1392 338C1370 354 1348 358 1314 350" stroke-width="4" opacity="0.035"/>
+    <path d="M1514 374C1455 358 1403 368 1336 392" stroke-width="2" opacity="0.045"/>
+    <path d="M72 830C126 808 190 813 276 844" stroke-width="5" opacity="0.028"/>
+    <path d="M1528 830C1474 808 1410 813 1324 844" stroke-width="5" opacity="0.028"/>
+  </g>
+
+  <!-- Middle: blue mirror-lake striations, split to preserve central clarity -->
+  <g fill="none" stroke-linecap="round">
+    <path d="M74 462C164 442 260 446 386 472C454 486 505 487 558 477" stroke="#33576b" stroke-width="4" opacity="0.16"/>
+    <path d="M1042 477C1095 487 1146 486 1214 472C1340 446 1436 442 1526 462" stroke="#33576b" stroke-width="4" opacity="0.16"/>
+    <path d="M52 506C180 479 319 489 456 519" stroke="#49758a" stroke-width="2" opacity="0.13"/>
+    <path d="M1144 519C1281 489 1420 479 1548 506" stroke="#49758a" stroke-width="2" opacity="0.13"/>
+    <path d="M92 548C196 532 296 539 408 560C471 572 514 571 554 563" stroke="#284a5f" stroke-width="6" opacity="0.12"/>
+    <path d="M1046 563C1086 571 1129 572 1192 560C1304 539 1404 532 1508 548" stroke="#284a5f" stroke-width="6" opacity="0.12"/>
+    <path d="M58 594C190 572 318 582 452 610" stroke="#58849a" stroke-width="2" opacity="0.10"/>
+    <path d="M1148 610C1282 582 1410 572 1542 594" stroke="#58849a" stroke-width="2" opacity="0.10"/>
+    <path d="M112 636C225 624 330 633 438 654" stroke="#345e73" stroke-width="3" opacity="0.10"/>
+    <path d="M1162 654C1270 633 1375 624 1488 636" stroke="#345e73" stroke-width="3" opacity="0.10"/>
+  </g>
+  <g fill="#27485a" opacity="0.055">
+    <path d="M62 490C184 465 327 474 510 515L470 536C304 499 176 494 62 516Z"/>
+    <path d="M1538 490C1416 465 1273 474 1090 515L1130 536C1296 499 1424 494 1538 516Z"/>
+    <path d="M94 570C214 552 337 561 500 596L452 620C311 588 198 583 94 598Z"/>
+    <path d="M1506 570C1386 552 1263 561 1100 596L1148 620C1289 588 1402 583 1506 598Z"/>
+  </g>
+  <path d="M620 559C704 552 896 552 980 559" fill="none" stroke="#385868" stroke-width="1" opacity="0.045"/>
+
+  <!-- Quiet central procession field -->
+  <g fill="none" stroke="#8a8376" opacity="0.045">
+    <path d="M554 274C630 260 970 260 1046 274"/>
+    <path d="M524 730C638 742 962 742 1076 730"/>
+    <path d="M508 882C640 870 960 870 1092 882"/>
+  </g>
+  <path d="M800 246V1030" fill="none" stroke="#b8aa90" stroke-width="1" stroke-dasharray="2 18" opacity="0.032"/>
+
+  <!-- Bottom: red ember strata, broad shapes rather than bright particles -->
+  <g fill="#6e211e">
+    <path d="M42 1104L42 1158H522L466 1139L392 1146L320 1124L236 1138L158 1118L92 1129Z" opacity="0.18"/>
+    <path d="M1558 1104L1558 1158H1078L1134 1139L1208 1146L1280 1124L1364 1138L1442 1118L1508 1129Z" opacity="0.18"/>
+    <path d="M42 1068L154 1042L238 1060L328 1037L414 1062L496 1048L574 1073L506 1084L428 1075L344 1092L254 1076L164 1090L42 1082Z" opacity="0.09"/>
+    <path d="M1558 1068L1446 1042L1362 1060L1272 1037L1186 1062L1104 1048L1026 1073L1094 1084L1172 1075L1256 1092L1346 1076L1436 1090L1558 1082Z" opacity="0.09"/>
+  </g>
+  <g fill="none" stroke="#a33b30" stroke-linecap="square">
+    <path d="M68 1120L164 1088L246 1102L340 1072L424 1094L526 1068" stroke-width="5" opacity="0.18"/>
+    <path d="M1532 1120L1436 1088L1354 1102L1260 1072L1176 1094L1074 1068" stroke-width="5" opacity="0.18"/>
+    <path d="M148 1057L201 1030L258 1045L314 1015" stroke-width="3" opacity="0.14"/>
+    <path d="M1452 1057L1399 1030L1342 1045L1286 1015" stroke-width="3" opacity="0.14"/>
+    <path d="M358 1133L422 1112L486 1126M1242 1133L1178 1112L1114 1126" stroke-width="2" opacity="0.12"/>
+  </g>
+  <g fill="#8f3028" opacity="0.10">
+    <path d="M126 1110L152 1048L171 1103Z"/>
+    <path d="M282 1127L308 1056L329 1117Z"/>
+    <path d="M439 1136L461 1082L481 1130Z"/>
+    <path d="M1474 1110L1448 1048L1429 1103Z"/>
+    <path d="M1318 1127L1292 1056L1271 1117Z"/>
+    <path d="M1161 1136L1139 1082L1119 1130Z"/>
+  </g>
+
+  <!-- Final low-contrast frame marks -->
+  <g fill="none" stroke="#8b806d" stroke-width="2" opacity="0.10">
+    <path d="M62 112V62H112M1488 62H1538V112M62 1088V1138H112M1488 1138H1538V1088"/>
+  </g>
+</svg>

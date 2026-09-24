@@ -1,0 +1,28 @@
+# Godot generated state and editor caches
+**/.godot/
+**/.godot_backup*/
+
+# Local builds and QA artifacts
+**/build/
+**/artifacts/
+**/_qa_*/
+**/Godot/
+**/node_modules/
+**/__pycache__/
+**/.venv/
+**/qa_*/
+**/*_qa_*/
+**/qa_final_level_balance/
+**/qa_v1_level_balance/
+**/qa_v201_docs/
+**/_extracted/_python_packages/
+
+# OS and editor noise
+.DS_Store
+Thumbs.db
+*.tmp
+*.swp
+
+# Local user data
+**/user:///
+.vendor/
