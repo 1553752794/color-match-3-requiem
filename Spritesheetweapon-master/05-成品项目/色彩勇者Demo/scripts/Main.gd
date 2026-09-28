@@ -2022,7 +2022,7 @@ func show_reward(reward: Dictionary) -> void:
 func _add_reward_card(parent: Control, card_id: String) -> void:
 	var card_data: Dictionary = GameDataScript.spectrum(card_id)
 	var panel: PanelContainer = PanelContainer.new()
-	panel.custom_minimum_size = Vector2(250, 188)
+	panel.custom_minimum_size = Vector2(250, 214)
 	panel.add_theme_stylebox_override("panel", _panel_style(Color(0.11, 0.11, 0.12, 0.94), GameDataScript.color_tint(String(card_data.get("color", "neutral")))))
 	parent.add_child(panel)
 	var box: VBoxContainer = VBoxContainer.new()
@@ -2038,6 +2038,12 @@ func _add_reward_card(parent: Control, card_id: String) -> void:
 	tags_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	tags_label.custom_minimum_size = Vector2(228, 24)
 	box.add_child(tags_label)
+	var synergy_reason: String = GameManager.get_spectrum_synergy_reason(card_id)
+	if not synergy_reason.is_empty():
+		var synergy_label: Label = _make_label("推荐 · " + synergy_reason, 12, GameThemeScript.TEXT_PRIMARY)
+		synergy_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		synergy_label.custom_minimum_size = Vector2(228, 24)
+		box.add_child(synergy_label)
 	var take: Button = _make_button("加入牌组", Vector2(0, 42), GameDataScript.color_tint(String(card_data.get("color", "neutral"))).darkened(0.30))
 	take.pressed.connect(func() -> void:
 		_play_enter()

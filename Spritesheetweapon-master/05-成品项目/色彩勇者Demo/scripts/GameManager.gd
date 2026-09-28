@@ -575,6 +575,44 @@ func get_selected_character() -> Dictionary:
 	var character_id: String = selected_character_id if selected_character_id != "" else starting_archetype_id
 	return GameDataScript.starting_archetype(character_id)
 
+## Returns one deterministic, evidence-backed reason for a reward card.
+## Empty means the current run has no strong enough signal to recommend it.
+func get_spectrum_synergy_reason(card_id: String) -> String:
+	var tags: Array[String] = GameDataScript.spectrum_tags(card_id)
+	if tags.is_empty():
+		return ""
+	var character_tag: String = _character_build_tag()
+	if not character_tag.is_empty() and tags.has(character_tag):
+		return "契合当前角色：%s" % character_tag
+	var completed_tags: Dictionary = run_stats.spectrum_tags_completed
+	for tag in tags:
+		if int(completed_tags.get(tag, 0)) > 0:
+			return "延续已完成流派：%s" % tag
+	var deck_tags: Dictionary = {}
+	for card_instance in deck:
+		for tag in GameDataScript.spectrum_tags(String(card_instance.get("card_id", ""))):
+			deck_tags[tag] = true
+	for tag in tags:
+		if deck_tags.has(tag):
+			return "接续当前牌组：%s" % tag
+	return ""
+
+func _character_build_tag() -> String:
+	var character_id: String = String(get_selected_character().get("id", ""))
+	match character_id:
+		"red":
+			return "燃烧"
+		"blue":
+			return "冻结"
+		"gold":
+			return "金币"
+		"gray":
+			return "灰蚀"
+		"mixed":
+			return "多色"
+		_:
+			return ""
+
 func get_selected_vow() -> Dictionary:
 	return NarrativeMemoryScript.vow(selected_vow_id)
 
