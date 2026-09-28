@@ -520,7 +520,9 @@ func _apply_clear_events(clear_events: Array) -> void:
 		_apply_clear_relics(event, color_key, count, cascade)
 		_emit_combat_feedback(
 			"clear", "%s消除 x%d" % [GameDataScript.color_full_name(color_key), count],
-			"基础色素 +%d / 连锁 %d" % [pigment_yield, cascade], color_key, 0.9
+			"%s · 基础色素 +%d / 连锁 %d" % [
+				String(event.get("shape_text", "三连")), pigment_yield, cascade
+			], color_key, 0.9
 		)
 
 		var current_intent: Dictionary = enemy.get_current_intent()

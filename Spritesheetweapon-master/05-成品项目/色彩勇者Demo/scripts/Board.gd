@@ -90,6 +90,8 @@ func preview_swap(first: Vector2i, second: Vector2i) -> Dictionary:
 				"cascade": 1,
 				"active": true,
 				"positions": group.duplicate(),
+				"shape": _classify_match_shape(group),
+				"shape_text": _match_shape_text(group),
 			})
 	var counts: Dictionary = _count_matches_by_type(matched)
 	return {
@@ -644,7 +646,57 @@ func _make_event(color_key: String, count: int, cascade: int, active: bool, posi
 		"active": active,
 		"sequence": event_sequence,
 		"positions": positions.duplicate(),
+		"shape": _classify_match_shape(positions),
+		"shape_text": _match_shape_text(positions),
 	}
+
+func _classify_match_shape(positions: Array) -> String:
+	var cells: Dictionary = {}
+	for value in positions:
+		if value is Vector2i:
+			cells[value] = true
+	var horizontal: Dictionary = {}
+	var vertical: Dictionary = {}
+	for pos in cells.keys():
+		var cell: Vector2i = pos
+		horizontal[cell.y] = int(horizontal.get(cell.y, 0)) + 1
+		vertical[cell.x] = int(vertical.get(cell.x, 0)) + 1
+	var has_horizontal: bool = false
+	var has_vertical: bool = false
+	for count in horizontal.values():
+		has_horizontal = has_horizontal or int(count) >= 3
+	for count in vertical.values():
+		has_vertical = has_vertical or int(count) >= 3
+	if has_horizontal and has_vertical:
+		for pivot in cells.keys():
+			var center: Vector2i = pivot
+			var four_way: bool = (
+				cells.has(center + Vector2i.LEFT)
+				and cells.has(center + Vector2i.RIGHT)
+				and cells.has(center + Vector2i.UP)
+				and cells.has(center + Vector2i.DOWN)
+			)
+			if four_way:
+				return "cross"
+		return "l_shape"
+	if cells.size() >= 5:
+		return "line_5"
+	if cells.size() >= 4:
+		return "line_4"
+	return "line_3"
+
+func _match_shape_text(positions: Array) -> String:
+	match _classify_match_shape(positions):
+		"line_5":
+			return "五连"
+		"line_4":
+			return "四连"
+		"cross":
+			return "十字"
+		"l_shape":
+			return "L/T 形"
+		_:
+			return "三连"
 
 ## Marks matched grid cells empty before the column collapse.
 func _clear_cells(matched: Dictionary) -> void:
