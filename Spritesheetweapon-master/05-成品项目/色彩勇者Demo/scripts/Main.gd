@@ -1546,6 +1546,7 @@ func _build_battle_middle() -> Control:
 	board_box.add_child(board_shell)
 	board = BoardScript.new()
 	board_shell.add_child(board)
+	board.swap_preview_changed.connect(_on_board_swap_preview)
 
 	var center_column: VBoxContainer = VBoxContainer.new()
 	center_column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -1764,6 +1765,34 @@ func _on_board_move_resolved(clear_events: Array, cascade_count: int) -> void:
 		moves_label.text = "本回合交换 %d" % turn_exchange_count
 	battle_manager.on_player_move(clear_events, cascade_count)
 	_show_onboarding_hint("first_swap", "初次采色")
+
+func _on_board_swap_preview(preview: Dictionary) -> void:
+	if not is_instance_valid(feedback_title) or battle_manager == null:
+		return
+	if preview.get("valid", false) != true:
+		_reset_combat_feedback()
+		return
+	var pigment_by_color: Dictionary = preview.get("pigment_by_color", {})
+	var pieces: Array[String] = []
+	for color_key in ["red", "blue", "gold", "gray"]:
+		var amount: int = int(pigment_by_color.get(color_key, 0))
+		if amount > 0:
+			pieces.append("%s+%d" % [GameDataScript.color_full_name(color_key), amount])
+	var detail: String = "预览 " + (" / ".join(pieces) if not pieces.is_empty() else "无色素")
+	var trigger_ids: Array = preview.get("triggerable_instance_ids", [])
+	if not trigger_ids.is_empty():
+		detail += "  · 色谱 %d 张可完成" % trigger_ids.size()
+	var resonance_name: String = String(preview.get("resonance_name", ""))
+	if not resonance_name.is_empty():
+		detail += "  · 共鸣 %s" % resonance_name
+	var risk_text: String = String(preview.get("risk_text", ""))
+	if not risk_text.is_empty():
+		detail += "  · " + risk_text
+	feedback_title.text = "交换预览"
+	feedback_detail.text = detail
+	feedback_title.add_theme_color_override("font_color", GameThemeScript.GOLD)
+	feedback_title.tooltip_text = feedback_title.text
+	feedback_detail.tooltip_text = detail
 
 func _on_battle_state_changed(state: Dictionary) -> void:
 	var previous_moves_left: int = int(last_state.get("moves_left", 3))

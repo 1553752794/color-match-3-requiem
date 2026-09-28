@@ -9,6 +9,8 @@ signal move_resolved(clear_events: Array, cascade_count: int)
 signal invalid_swap
 ## Emitted while the board is animating or resolving so other systems can lock UI.
 signal board_busy_changed(is_busy: bool)
+## Emitted when the selected tile has a valid adjacent swap candidate under it.
+signal swap_preview_changed(preview: Dictionary)
 
 const TileScript = preload("res://scripts/Tile.gd")
 
@@ -392,6 +394,8 @@ func _ensure_grid_root() -> void:
 			tile.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 			tile.setup(Vector2i(x, y), "gray")
 			tile.tile_clicked.connect(_on_tile_clicked)
+			tile.mouse_entered.connect(_on_tile_mouse_entered.bind(Vector2i(x, y)))
+			tile.mouse_exited.connect(_on_tile_mouse_exited.bind(Vector2i(x, y)))
 			grid_root.add_child(tile)
 			row.append(tile)
 		tile_nodes.append(row)
@@ -711,11 +715,32 @@ func _has_possible_move(candidate_grid: Array = []) -> bool:
 func _select_cell(pos: Vector2i) -> void:
 	selected_cell = pos
 	_refresh_tiles()
+	_emit_swap_preview(pos)
 
 ## Clears selection and removes highlight visuals.
 func _clear_selection() -> void:
 	selected_cell = Vector2i(-1, -1)
 	_refresh_tiles()
+	swap_preview_changed.emit({"valid": false, "clear_events": [], "cascade_count": 0})
+
+func _on_tile_mouse_entered(pos: Vector2i) -> void:
+	if busy or external_locked or selected_cell == Vector2i(-1, -1):
+		return
+	_emit_swap_preview(pos)
+
+func _on_tile_mouse_exited(pos: Vector2i) -> void:
+	if selected_cell == Vector2i(-1, -1):
+		return
+	# Keep the last preview visible while the cursor crosses the small gap
+	# between tiles; a new tile enter immediately replaces it.
+	if pos == selected_cell:
+		swap_preview_changed.emit({"valid": false, "clear_events": [], "cascade_count": 0})
+
+func _emit_swap_preview(second: Vector2i) -> void:
+	if selected_cell == Vector2i(-1, -1) or not _are_adjacent(selected_cell, second):
+		swap_preview_changed.emit({"valid": false, "clear_events": [], "cascade_count": 0})
+		return
+	swap_preview_changed.emit(preview_swap(selected_cell, second))
 
 ## Applies the combat lock to every tile button.
 func _apply_external_lock() -> void:

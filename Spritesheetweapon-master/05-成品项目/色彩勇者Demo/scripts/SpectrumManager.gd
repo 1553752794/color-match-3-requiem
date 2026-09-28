@@ -152,6 +152,18 @@ func evaluate_triggers(context: Dictionary) -> Array[Dictionary]:
 				changed = true
 	return fired
 
+## Evaluates hypothetical clear events and restores every live spectrum field.
+## This is intentionally implemented through the existing trigger rules so the
+## combat preview cannot drift from the real resolution path.
+func preview_clear_events(events: Array[Dictionary], context: Dictionary) -> Array[Dictionary]:
+	var snapshot: Dictionary = create_snapshot()
+	var fired: Array[Dictionary] = []
+	var base_damage: int = maxi(int(context.get("base_damage", 0)), 0)
+	for event in events:
+		fired.append_array(register_clear_event(event, base_damage, context))
+	restore_snapshot(snapshot)
+	return fired
+
 func get_card_states(retained_slots: Variant = -1) -> Array[Dictionary]:
 	var states: Array[Dictionary] = []
 	var trajectory_slot: int = _trajectory_target_slot()

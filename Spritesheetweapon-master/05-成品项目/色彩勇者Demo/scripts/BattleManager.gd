@@ -323,9 +323,12 @@ func set_target_spectrum(instance_id: String) -> bool:
 
 func preview_swap(preview: Dictionary) -> Dictionary:
 	var result: Dictionary = preview.duplicate(true)
-	if result.get("valid", false) != true:
+	if result.get("valid", false) != true or spectrum_manager == null:
 		return result
 	var pigment_by_color: Dictionary = {}
+	var red_count: int = 0
+	var blue_count: int = 0
+	var last_color: String = ""
 	for event_value in result.get("clear_events", []):
 		if not event_value is Dictionary:
 			continue
@@ -335,12 +338,58 @@ func preview_swap(preview: Dictionary) -> Dictionary:
 		if color_key.is_empty() or amount <= 0:
 			continue
 		pigment_by_color[color_key] = int(pigment_by_color.get(color_key, 0)) + _pigment_yield(amount, 1)
+		last_color = color_key
+		if color_key == "red":
+			red_count = max(red_count, amount)
+		elif color_key == "blue":
+			blue_count = max(blue_count, amount)
 	result["pigment_by_color"] = pigment_by_color
-	result["triggerable_instance_ids"] = []
-	result["resonance_id"] = ""
+	var current_intent: Dictionary = enemy.get_current_intent() if enemy != null else {}
+	var preview_context: Dictionary = {
+		"moves_left": moves_left,
+		"moves_left_after": max(moves_left - 1, 0),
+		"last_red_count": red_count,
+		"last_blue_count": blue_count,
+		"enemy_intent": current_intent,
+		"enemy_intent_type": String(current_intent.get("type", "")),
+		"enemy_burn_stacks": enemy.burn_stacks if enemy != null else 0,
+		"player_hp_ratio": float(GameManager.player_hp) / float(max(GameManager.player_max_hp, 1)),
+		"shield": GameManager.shield,
+		"coins": GameManager.coins,
+		"battle_gold_earned": gold_bonus_this_battle,
+		"skipped_reward_previous": GameManager.skipped_card_reward_previous,
+		"enemy_polluted_this_battle": enemy_polluted_this_battle,
+		"gray_pressure": GameManager.gray_pressure,
+		"red_condition_reduction": red_condition_reduction,
+		"base_damage": int(pigment_by_color.get("red", 0)) + int(pigment_by_color.get("blue", 0)) + int(pigment_by_color.get("gold", 0)) + int(pigment_by_color.get("gray", 0)),
+	}
+	var preview_events: Array[Dictionary] = []
+	for event_value in result.get("clear_events", []):
+		if event_value is Dictionary:
+			preview_events.append(event_value)
+	var fired: Array[Dictionary] = spectrum_manager.preview_clear_events(preview_events, preview_context)
+	var triggerable_instance_ids: Array[String] = []
+	var sequence_preview: RefCounted = ResonanceSequenceScript.new()
+	sequence_preview.restore(resonance_sequence.snapshot())
+	var predicted_resonance: Dictionary = {}
+	for trigger in fired:
+		var instance_id: String = String(trigger.get("instance_id", ""))
+		if not instance_id.is_empty():
+			triggerable_instance_ids.append(instance_id)
+		var card: Dictionary = GameDataScript.spectrum_for_level(
+			String(trigger.get("card_id", "")), int(trigger.get("level", 0))
+		)
+		var resonance_result: Dictionary = sequence_preview.register_color(String(card.get("color", "neutral")))
+		var resonance_value: Dictionary = resonance_result.get("resonance", {})
+		if not resonance_value.is_empty():
+			predicted_resonance = resonance_value.duplicate(true)
+	result["triggerable_instance_ids"] = triggerable_instance_ids
+	result["resonance_id"] = String(predicted_resonance.get("id", ""))
+	result["resonance_name"] = String(predicted_resonance.get("name", ""))
+	result["target_will_trigger"] = triggerable_instance_ids.has(target_spectrum_instance_id)
+	result["last_color"] = last_color
 	result["risk_text"] = ""
-	var intent: Dictionary = enemy.get_current_intent() if enemy != null else {}
-	var intent_type: String = String(intent.get("type", ""))
+	var intent_type: String = String(current_intent.get("type", ""))
 	if intent_type == "spectrum_seal":
 		result["risk_text"] = "敌人正在封锁色谱，优先完成目标色谱。"
 	elif intent_type == "board_corrupt":
