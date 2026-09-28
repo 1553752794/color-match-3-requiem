@@ -17,6 +17,7 @@
 **/qa_v1_level_balance/
 **/qa_v201_docs/
 **/_extracted/_python_packages/
+**/production/backups/
 
 # OS and editor noise
 .DS_Store
