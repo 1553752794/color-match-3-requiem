@@ -2190,6 +2190,8 @@ func _add_shop_item(parent: Control, item: Dictionary) -> void:
 		_play_enter()
 		if String(item.get("type", "")) == "upgrade":
 			show_upgrade_picker("shop", item)
+		elif String(item.get("type", "")) == "remove":
+			show_remove_picker(item)
 		elif GameManager.buy_shop_item(item):
 			active_shop_inventory.erase(item)
 			show_shop(false)
@@ -2197,6 +2199,48 @@ func _add_shop_item(parent: Control, item: Dictionary) -> void:
 			_on_toast("金币不足，或牌组太薄无法删谱。", Callable(self, "show_shop").bind(false))
 	)
 	parent.add_child(button)
+
+func show_remove_picker(shop_item: Dictionary) -> void:
+	_clear_screen()
+	current_screen = _make_screen(GameThemeScript.BG_BASE)
+	var box: VBoxContainer = _center_box(Vector2(1060, 620), 10)
+	box.add_child(_centered_label("选择要净化的色谱", 32, GameThemeScript.GOLD))
+	box.add_child(_centered_label(
+		"费用 %d 金币 · 选择一个牌组实例移除（保留至少 6 张牌）" % int(shop_item.get("price", 0)),
+		17, GameThemeScript.TEXT_SECONDARY
+	))
+	var grid: GridContainer = GridContainer.new()
+	grid.columns = 3
+	grid.add_theme_constant_override("h_separation", 10)
+	grid.add_theme_constant_override("v_separation", 10)
+	box.add_child(grid)
+	for card_instance in GameManager.get_removable_cards():
+		var card_id: String = String(card_instance.get("card_id", ""))
+		var instance_id: String = String(card_instance.get("instance_id", ""))
+		var card_data: Dictionary = GameDataScript.spectrum(card_id)
+		var tags: Array[String] = GameDataScript.spectrum_tags(card_id)
+		var text: String = "%s\n%s\n流派 · %s" % [
+			String(card_data.get("name", card_id)),
+			GameDataScript.color_full_name(String(card_data.get("color", "neutral"))),
+			" / ".join(tags),
+		]
+		var card_button: Button = _make_button(text, Vector2(320, 96), GameDataScript.color_tint(String(card_data.get("color", "neutral"))).darkened(0.30))
+		card_button.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		card_button.pressed.connect(func() -> void:
+			_play_enter()
+			if GameManager.buy_shop_item(shop_item, instance_id):
+				active_shop_inventory.erase(shop_item)
+				show_shop(false)
+			else:
+				_on_toast("金币不足或牌组已达到最小张数。", Callable(self, "show_shop").bind(false))
+		)
+		grid.add_child(card_button)
+	var back: Button = _make_button("返回商店", Vector2(220, 48))
+	back.pressed.connect(func() -> void:
+		_play_select()
+		show_shop(false)
+	)
+	box.add_child(back)
 
 func show_upgrade_picker(source: String, shop_item: Dictionary = {}) -> void:
 	_clear_screen()

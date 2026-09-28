@@ -1066,6 +1066,15 @@ func buy_shop_item(item: Dictionary, target_card_instance_id: String = "") -> bo
 	run_state_changed.emit()
 	return true
 
+func get_removable_cards() -> Array[Dictionary]:
+	if deck.size() <= 6:
+		return []
+	var result: Array[Dictionary] = []
+	for card in deck:
+		if card is Dictionary and not String(card.get("instance_id", "")).is_empty():
+			result.append(card.duplicate(true))
+	return result
+
 func consume_skipped_reward_bonus() -> void:
 	skipped_card_reward_previous = false
 
@@ -2103,7 +2112,7 @@ func _pick_relic(rarities: Array[String]) -> String:
 	return String(pool.pick_random())
 
 func _first_removable_card() -> String:
-	for card in deck:
+	for card in get_removable_cards():
 		var card_id: String = String(card.get("card_id", ""))
 		if _deck_card_definition_count(card_id) > 1:
 			return String(card.get("instance_id", ""))
