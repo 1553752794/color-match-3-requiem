@@ -1,6 +1,7 @@
 # Godot generated state and editor caches
 **/.godot/
 **/.godot_backup*/
+**/*.uid
 
 # Local builds and QA artifacts
 **/build/
