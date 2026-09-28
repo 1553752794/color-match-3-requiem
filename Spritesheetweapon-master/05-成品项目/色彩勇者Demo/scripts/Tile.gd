@@ -31,6 +31,7 @@ const TILE_LABELS = {
 var grid_position: Vector2i = Vector2i.ZERO
 var tile_type: String = "gray"
 var is_selected: bool = false
+var last_clear_shape: String = ""
 var _feedback_tween: Tween
 var _gem_icon: TextureRect
 var _color_label: Label
@@ -58,6 +59,7 @@ func set_grid_position(new_position: Vector2i) -> void:
 func set_tile_type(new_type: String) -> void:
 	_stop_feedback()
 	tile_type = new_type
+	last_clear_shape = ""
 	scale = Vector2.ONE
 	modulate = Color.WHITE
 	_apply_visuals()
@@ -68,12 +70,20 @@ func set_selected(value: bool) -> void:
 	_apply_visuals()
 
 ## Shrinks and fades the tile before Board.gd clears the logical cell.
-func play_clear() -> void:
+func play_clear(shape: String = "line_3") -> void:
 	_stop_feedback()
+	last_clear_shape = shape
 	pivot_offset = size * 0.5
 	if _skip_motion():
 		scale = Vector2.ONE
 		modulate = Color(1, 1, 1, 0)
+		return
+	var special_shape: bool = shape in ["line_4", "line_5", "cross", "l_shape"]
+	if special_shape:
+		_feedback_tween = create_tween()
+		_feedback_tween.tween_property(self, "scale", Vector2(1.08, 1.08), 0.05).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+		_feedback_tween.tween_property(self, "scale", Vector2(0.68, 0.68), 0.11).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+		_feedback_tween.parallel().tween_property(self, "modulate:a", 0.0, 0.16)
 		return
 	_feedback_tween = create_tween().set_parallel(true)
 	_feedback_tween.tween_property(self, "scale", Vector2(0.72, 0.72), 0.14).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
@@ -99,6 +109,8 @@ func _stop_feedback() -> void:
 	_feedback_tween = null
 
 func _skip_motion() -> bool:
+	if not is_inside_tree():
+		return false
 	var settings: Node = get_node_or_null("/root/SettingsManager")
 	return settings != null and (bool(settings.reduced_motion) or bool(settings.quick_resolve))
 

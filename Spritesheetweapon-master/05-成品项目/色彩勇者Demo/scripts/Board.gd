@@ -528,14 +528,18 @@ func _resolve_cascades(start_cascade: int, first_is_active: bool = false) -> Arr
 			break
 
 		var groups_by_type: Dictionary = _group_matches_by_type(matched)
+		var shape_by_position: Dictionary = {}
 		for color_key in groups_by_type.keys():
 			for group_value in groups_by_type[color_key]:
 				var group: Array = group_value
 				events.append(_make_event(String(color_key), group.size(), cascade, first_is_active and cascade == start_cascade, group))
+				var shape: String = _classify_match_shape(group)
+				for group_position in group:
+					shape_by_position[group_position] = shape
 
 		for pos in matched.keys():
 			var tile: Tile = tile_nodes[pos.y][pos.x] as Tile
-			tile.play_clear()
+			tile.play_clear(String(shape_by_position.get(pos, "line_3")))
 		await get_tree().create_timer(0.18).timeout
 
 		var before_refill: Array = grid.duplicate(true) if _has_deterministic_refill() else []
